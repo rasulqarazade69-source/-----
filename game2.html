@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Roblox Game</title>
+    <style>
+        body {
+            background: #e0e0e0;
+            text-align: center;
+            font-family: Arial;
+        }
+
+        #game {
+            width: 600px;
+            height: 300px;
+            background: white;
+            border: 3px solid black;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player {
+            width: 30px;
+            height: 30px;
+            background: blue;
+            position: absolute;
+            bottom: 0;
+            left: 50px;
+        }
+
+        .platform {
+            width: 120px;
+            height: 15px;
+            background: green;
+            position: absolute;
+        }
+
+        #finish {
+            width: 40px;
+            height: 40px;
+            background: gold;
+            position: absolute;
+            right: 20px;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>👾 Mini Roblox Platformer</h1>
+<p>← → move | ↑ jump</p>
+
+<div id="game">
+    <div class="player" id="player"></div>
+
+    <div class="platform" style="left: 120px; bottom: 60px;"></div>
+    <div class="platform" style="left: 300px; bottom: 120px;"></div>
+    <div class="platform" style="left: 450px; bottom: 60px;"></div>
+
+    <div id="finish"></div>
+</div>
+
+<p id="message"></p>
+
+<script>
+    const player = document.getElementById("player");
+    const finish = document.getElementById("finish");
+    const message = document.getElementById("message");
+
+    let x = 50;
+    let y = 0;
+    let velocityY = 0;
+    let onGround = true;
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") x += 10;
+        if (e.key === "ArrowLeft") x -= 10;
+
+        if (e.key === "ArrowUp" && onGround) {
+            velocityY = 15;
+            onGround = false;
+        }
+    });
+
+    function gameLoop() {
+        velocityY -= 1;
+        y += velocityY;
+
+        if (y <= 0) {
+            y = 0;
+            velocityY = 0;
+            onGround = true;
+        }
+
+        if (y < -100) {
+            message.textContent = "💀 You fell! Reload page.";
+        }
+
+        player.style.left = x + "px";
+        player.style.bottom = y + "px";
+
+        checkWin();
+        requestAnimationFrame(gameLoop);
+    }
+
+    function checkWin() {
+        const p = player.getBoundingClientRect();
+        const f = finish.getBoundingClientRect();
+
+        if (
+            p.right > f.left &&
+            p.left < f.right &&
+            p.bottom > f.top &&
+            p.top < f.bottom
+        ) {
+            message.textContent = "🏆 YOU WIN!";
+        }
+    }
+
+    gameLoop();
+</script>
+
+</body>
+</html>

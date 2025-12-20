@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Catch the Box</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+        }
+
+        #game {
+            width: 400px;
+            height: 300px;
+            border: 3px solid black;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        #box {
+            width: 50px;
+            height: 50px;
+            background: red;
+            position: absolute;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🎮 Catch the Box</h1>
+
+<p>Score: <span id="score">0</span></p>
+<p>Lives: <span id="lives">3</span></p>
+
+<div id="game">
+    <div id="box"></div>
+</div>
+
+<p id="message"></p>
+
+<script>
+    let score = 0;
+    let lives = 3;
+
+    const box = document.getElementById("box");
+    const scoreText = document.getElementById("score");
+    const livesText = document.getElementById("lives");
+    const message = document.getElementById("message");
+
+    function moveBox() {
+        if (lives <= 0) return;
+
+        const game = document.getElementById("game");
+        const maxX = game.clientWidth - 50;
+        const maxY = game.clientHeight - 50;
+
+        const x = Math.floor(Math.random() * maxX);
+        const y = Math.floor(Math.random() * maxY);
+
+        box.style.left = x + "px";
+        box.style.top = y + "px";
+
+        lives--;
+        livesText.textContent = lives;
+
+        if (lives === 0) {
+            message.textContent = "❌ Game Over!";
+            box.style.display = "none";
+        }
+    }
+
+    box.onclick = function () {
+        score++;
+        scoreText.textContent = score;
+
+        if (score >= 10) {
+            message.textContent = "🏆 YOU WIN!";
+            box.style.display = "none";
+            return;
+        }
+
+        lives++;
+        livesText.textContent = lives;
+        moveBox();
+    };
+
+    setInterval(moveBox, 1500);
+</script>
+
+</body>
+</html>
