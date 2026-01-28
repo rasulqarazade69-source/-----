@@ -1,0 +1,11 @@
+p {
+    color: yellow;
+}
+
+p::before {
+    content: "★ ";
+}
+
+p::after {
+    content: " ★";
+}
