@@ -1,0 +1,17 @@
+.box {
+    width: 100px;
+    height: 100px;
+    background: green;
+    animation: move 3s ease-in-out 5;
+}
+
+@keyframes move {
+    from {
+        margin-left: 0;
+        background: green;
+    }
+    to {
+        margin-left: 200px;
+        background: blue;
+    }
+}

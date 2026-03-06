@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Neon Dodge</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top, #1b1f3b, #0a0c1b);
+        font-family: Arial, sans-serif;
+        color: #fff;
+        overflow: hidden;
+    }
+    #game {
+        position: relative;
+        width: 320px;
+        height: 500px;
+        background: linear-gradient(180deg, #0ff2, #000);
+        border-radius: 20px;
+        box-shadow: 0 0 30px #00f6ff55;
+        overflow: hidden;
+    }
+    #player {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        width: 40px;
+        height: 40px;
+        background: #00f6ff;
+        border-radius: 10px;
+        transform: translateX(-50%);
+        box-shadow: 0 0 15px #00f6ff;
+    }
+    .enemy {
+        position: absolute;
+        top: -40px;
+        width: 35px;
+        height: 35px;
+        background: #ff2e63;
+        border-radius: 8px;
+        box-shadow: 0 0 15px #ff2e63;
+    }
+    #score {
+        position: absolute;
+        top: 15px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        text-shadow: 0 0 10px #00f6ff;
+    }
+    #gameOver {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.85);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 15px;
+        font-size: 22px;
+    }
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        background: #00f6ff;
+        color: #000;
+        box-shadow: 0 0 15px #00f6ff;
+    }
+</style>
+</head>
+<body>
+
+<div id="game">
+    <div id="score">Score: 0</div>
+    <div id="player"></div>
+    <div id="gameOver">
+        <div>💥 Game Over</div>
+        <button onclick="restart()">Restart</button>
+    </div>
+</div>
+
+<script>
+const game = document.getElementById('game');
+const player = document.getElementById('player');
+const scoreEl = document.getElementById('score');
+const gameOverEl = document.getElementById('gameOver');
+
+let playerX = 140;
+let score = 0;
+let speed = 3;
+let playing = true;
+
+function movePlayer(x) {
+    playerX = Math.max(0, Math.min(280, x));
+    player.style.left = playerX + 'px';
+}
+
+document.addEventListener('mousemove', e => {
+    const rect = game.getBoundingClientRect();
+    movePlayer(e.clientX - rect.left - 20);
+});
+
+game.addEventListener('touchmove', e => {
+    const rect = game.getBoundingClientRect();
+    movePlayer(e.touches[0].clientX - rect.left - 20);
+});
+
+function spawnEnemy() {
+    if (!playing) return;
+    const enemy = document.createElement('div');
+    enemy.className = 'enemy';
+    enemy.style.left = Math.random() * 285 + 'px';
+    game.appendChild(enemy);
+
+    let y = -40;
+    const fall = setInterval(() => {
+        if (!playing) {
+            clearInterval(fall);
+            enemy.remove();
+            return;
+        }
+        y += speed;
+        enemy.style.top = y + 'px';
+
+        const eRect = enemy.getBoundingClientRect();
+        const pRect = player.getBoundingClientRect();
+
+        if (
+            eRect.bottom > pRect.top &&
+            eRect.top < pRect.bottom &&
+            eRect.left < pRect.right &&
+            eRect.right > pRect.left
+        ) {
+            endGame();
+        }
+
+        if (y > 520) {
+            clearInterval(fall);
+            enemy.remove();
+            score++;
+            speed += 0.05;
+            scoreEl.textContent = 'Score: ' + score;
+        }
+    }, 16);
+}
+
+function endGame() {
+    playing = false;
+    gameOverEl.style.display = 'flex';
+}
+
+function restart() {
+    document.querySelectorAll('.enemy').forEach(e => e.remove());
+    score = 0;
+    speed = 3;
+    playing = true;
+    scoreEl.textContent = 'Score: 0';
+    gameOverEl.style.display = 'none';
+}
+
+setInterval(spawnEnemy, 800);
+</script>
+
+</body>
+</html>

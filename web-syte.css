@@ -1,0 +1,18 @@
+h1{
+    color: red;
+    text-align: center;
+    text-decoration: dashed;
+}
+p{
+    color: blue;
+    text-align: center;
+    text-decoration: dashed;
+}
+a{
+    text-align: center;
+}
+img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

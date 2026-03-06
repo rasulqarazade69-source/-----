@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+}
+
+.container {
+  width: 900px;
+  margin: 50px auto;
+  display: flex;
+  gap: 50px;
+  align-items: center;
+}
+
+.left {
+  position: relative;
+}
+
+.left img {
+  width: 350px;
+}
+
+.social {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+}
+
+.social span {
+  color: white;
+  font-size: 24px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.right {
+  width: 400px;
+}
+
+.right h2 {
+  letter-spacing: 5px;
+  font-size: 28px;
+}
+
+.right p {
+  color: gray;
+  line-height: 1.7;
+}
